@@ -27,6 +27,24 @@ function Bars({ title, data, total }) {
   );
 }
 
+function downloadCsv(rows) {
+  const esc = (v) => `"${String(v ?? '').replaceAll('"', '""')}"`;
+  const lines = [
+    ['Name', 'Location', 'Food', 'Drinks side', 'Drinks', 'Snacks', 'Submitted'].map(esc).join(','),
+    ...rows.map((r) =>
+      [r.name, r.location, r.diet, r.booze, (r.drinks || []).join('; '), r.snacks.join('; '), new Date(r.at).toLocaleString()]
+        .map(esc)
+        .join(',')
+    ),
+  ];
+  const url = URL.createObjectURL(new Blob(['﻿' + lines.join('\n')], { type: 'text/csv' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'trip-responses.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function Dashboard() {
   const [rows, setRows] = useState(null);
 
@@ -48,6 +66,11 @@ export default function Dashboard() {
         <div className="emoji">📊🎉</div>
         <h1>Trip Dashboard</h1>
         <p>Live responses · refreshes every 15s</p>
+        {rows.length > 0 && (
+          <button className="export" onClick={() => downloadCsv(rows)}>
+            Export CSV ⬇️
+          </button>
+        )}
       </div>
 
       <div className="tiles">
@@ -60,8 +83,8 @@ export default function Dashboard() {
       <Bars title="Drinks side" data={pretty(count(rows, 'booze'))} total={rows.length} />
       <Bars
         title="Refreshers (non-alcoholic)"
-        data={count(rows.filter((r) => r.drink), 'drink')}
-        total={rows.filter((r) => r.drink).length}
+        data={count(rows.filter((r) => r.drinks?.length), 'drinks')}
+        total={rows.filter((r) => r.drinks?.length).length}
       />
       <Bars title="Dry snacks popularity" data={count(rows, 'snacks')} total={rows.length} />
 
@@ -71,7 +94,7 @@ export default function Dashboard() {
           <div className="row" key={i} style={{ gridTemplateColumns: '110px 1fr' }}>
             <span className="lbl">{r.name}</span>
             <span className="val" style={{ color: '#c3c2b7' }}>
-              {r.diet === 'veg' ? '🥗' : '🍗'} · {r.drink || '🍻 sorted'} · {r.snacks.length} snack{r.snacks.length > 1 ? 's' : ''}
+              📍{r.location} · {r.diet === 'veg' ? '🥗' : '🍗'} · {r.drinks?.length ? r.drinks.join(', ') : '🍻 sorted'} · {r.snacks.length} snack{r.snacks.length > 1 ? 's' : ''}
             </span>
           </div>
         ))}

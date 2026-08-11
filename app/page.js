@@ -23,28 +23,34 @@ const SNACK_QUIP = (n) =>
 
 export default function Form() {
   const [name, setName] = useState('');
+  const [location, setLocation] = useState('');
   const [diet, setDiet] = useState(null);
   const [booze, setBooze] = useState(null);
-  const [drink, setDrink] = useState(null);
+  const [drinks, setDrinks] = useState([]);
+  const [other, setOther] = useState(false);
   const [custom, setCustom] = useState('');
   const [snacks, setSnacks] = useState([]);
   const [state, setState] = useState('idle'); // idle | busy | done | error
   const [entered, setEntered] = useState(false);
 
-  const toggleSnack = (s) =>
-    setSnacks((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
+  const toggle = (set) => (v) => set((p) => (p.includes(v) ? p.filter((x) => x !== v) : [...p, v]));
+  const toggleSnack = toggle(setSnacks);
+  const toggleDrink = toggle(setDrinks);
 
-  const finalDrink =
-    booze === 'alcoholic' ? null : drink === 'other' ? custom.trim().slice(0, 40) : drink;
+  const finalDrinks =
+    booze === 'alcoholic'
+      ? []
+      : [...drinks, ...(other && custom.trim() ? [custom.trim().slice(0, 40)] : [])];
   const ready =
-    name.trim() && diet && booze && (booze === 'alcoholic' || finalDrink) && snacks.length > 0;
+    name.trim() && location.trim() && diet && booze &&
+    (booze === 'alcoholic' || finalDrinks.length > 0) && snacks.length > 0;
 
   async function submit() {
     setState('busy');
     const res = await fetch('/api/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name.trim(), diet, booze, drink: finalDrink, snacks }),
+      body: JSON.stringify({ name: name.trim(), location: location.trim(), diet, booze, drinks: finalDrinks, snacks }),
     }).catch(() => null);
     setState(res && res.ok ? 'done' : 'error');
   }
@@ -122,6 +128,17 @@ export default function Form() {
       </div>
 
       <div className="card">
+        <h2>📍 Where do we scoop you up from?</h2>
+        <input
+          type="text"
+          placeholder="Your area, not your live location"
+          maxLength={60}
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
+      </div>
+
+      <div className="card">
         <h2>🍽️ Pick your fighter</h2>
         <div className="choices">
           <button className={`choice ${diet === 'veg' ? 'on' : ''}`} onClick={() => setDiet('veg')}>
@@ -142,14 +159,14 @@ export default function Form() {
         <div className="choices">
           <button
             className={`choice ${booze === 'alcoholic' ? 'on' : ''}`}
-            onClick={() => { setBooze('alcoholic'); setDrink(null); }}
+            onClick={() => { setBooze('alcoholic'); setDrinks([]); setOther(false); }}
           >
             <span className="big">🍻</span>Alcoholic
             {booze === 'alcoholic' && <Popper />}
           </button>
           <button
             className={`choice ${booze === 'nonalcoholic' ? 'on' : ''}`}
-            onClick={() => { setBooze('nonalcoholic'); setDrink(null); }}
+            onClick={() => { setBooze('nonalcoholic'); setDrinks([]); setOther(false); }}
           >
             <span className="big">🥤</span>Non-Alcoholic
             {booze === 'nonalcoholic' && <Popper />}
@@ -165,18 +182,18 @@ export default function Form() {
 
       {booze === 'nonalcoholic' && (
         <div className="card">
-          <h2>🧃 Pick your refresher</h2>
+          <h2>🧃 Pick your refreshers — grab as many as you like</h2>
           <div className="chips">
             {DRINKS.map((d) => (
-              <button key={d} className={`chip ${drink === d ? 'on' : ''}`} onClick={() => setDrink(d)}>
+              <button key={d} className={`chip ${drinks.includes(d) ? 'on' : ''}`} onClick={() => toggleDrink(d)}>
                 {d}
               </button>
             ))}
-            <button className={`chip ${drink === 'other' ? 'on' : ''}`} onClick={() => setDrink('other')}>
+            <button className={`chip ${other ? 'on' : ''}`} onClick={() => setOther(!other)}>
               Other ✍️
             </button>
           </div>
-          {drink === 'other' && (
+          {other && (
             <div style={{ marginTop: 12 }}>
               <input
                 type="text"
