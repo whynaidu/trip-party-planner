@@ -94,7 +94,7 @@ export default function Dashboard() {
           <div className="row" key={i} style={{ gridTemplateColumns: '110px 1fr' }}>
             <span className="lbl">{r.name}</span>
             <span className="val" style={{ color: '#c3c2b7' }}>
-              📍{r.location} · {r.diet === 'veg' ? '🥗' : '🍗'} · {r.drinks?.length ? r.drinks.join(', ') : '🍻 sorted'} · {r.snacks.length} snack{r.snacks.length > 1 ? 's' : ''}
+              📍{r.location || '—'} ·{r.diet === 'veg' ? '🥗' : '🍗'} · {r.drinks?.length ? r.drinks.join(', ') : '🍻 sorted'} · {r.snacks.length} snack{r.snacks.length > 1 ? 's' : ''}
             </span>
           </div>
         ))}

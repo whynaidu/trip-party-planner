@@ -8,5 +8,9 @@ export async function GET() {
   const all = await Promise.all(
     blobs.map((b) => fetch(b.url, { cache: 'no-store' }).then((r) => r.json()).catch(() => null))
   );
-  return Response.json(all.filter(Boolean).sort((a, b) => b.at - a.at));
+  // normalize pre-multi-select records ({drink: "x"} → {drinks: ["x"]}, missing location)
+  const norm = all
+    .filter(Boolean)
+    .map((r) => ({ location: '', ...r, drinks: r.drinks ?? (r.drink ? [r.drink] : []) }));
+  return Response.json(norm.sort((a, b) => b.at - a.at));
 }
