@@ -14,8 +14,10 @@ export default function Form() {
   const toggleSnack = (s) =>
     setSnacks((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
 
-  const finalDrink = drink === 'other' ? custom.trim().slice(0, 40) : drink;
-  const ready = name.trim() && diet && booze && finalDrink && snacks.length > 0;
+  const finalDrink =
+    booze === 'alcoholic' ? null : drink === 'other' ? custom.trim().slice(0, 40) : drink;
+  const ready =
+    name.trim() && diet && booze && (booze === 'alcoholic' || finalDrink) && snacks.length > 0;
 
   async function submit() {
     setState('busy');
@@ -85,20 +87,18 @@ export default function Form() {
         </div>
       </div>
 
-      {booze && (
+      {booze === 'nonalcoholic' && (
         <div className="card">
-          <h2>{booze === 'alcoholic' ? '🍹 Pick your poison' : '🧃 Pick your refresher'}</h2>
+          <h2>🧃 Pick your refresher</h2>
           <div className="chips">
-            {DRINKS[booze].map((d) => (
+            {DRINKS.map((d) => (
               <button key={d} className={`chip ${drink === d ? 'on' : ''}`} onClick={() => setDrink(d)}>
                 {d}
               </button>
             ))}
-            {booze === 'nonalcoholic' && (
-              <button className={`chip ${drink === 'other' ? 'on' : ''}`} onClick={() => setDrink('other')}>
-                Other ✍️
-              </button>
-            )}
+            <button className={`chip ${drink === 'other' ? 'on' : ''}`} onClick={() => setDrink('other')}>
+              Other ✍️
+            </button>
           </div>
           {drink === 'other' && (
             <div style={{ marginTop: 12 }}>

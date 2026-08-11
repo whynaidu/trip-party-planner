@@ -58,7 +58,11 @@ export default function Dashboard() {
 
       <Bars title="Food preference" data={pretty(count(rows, 'diet'))} total={rows.length} />
       <Bars title="Drinks side" data={pretty(count(rows, 'booze'))} total={rows.length} />
-      <Bars title="Preferred drinks" data={count(rows, 'drink')} total={rows.length} />
+      <Bars
+        title="Refreshers (non-alcoholic)"
+        data={count(rows.filter((r) => r.drink), 'drink')}
+        total={rows.filter((r) => r.drink).length}
+      />
       <Bars title="Dry snacks popularity" data={count(rows, 'snacks')} total={rows.length} />
 
       <section className="chart">
@@ -67,7 +71,7 @@ export default function Dashboard() {
           <div className="row" key={i} style={{ gridTemplateColumns: '110px 1fr' }}>
             <span className="lbl">{r.name}</span>
             <span className="val" style={{ color: '#c3c2b7' }}>
-              {r.diet === 'veg' ? '🥗' : '🍗'} · {r.drink} · {r.snacks.length} snack{r.snacks.length > 1 ? 's' : ''}
+              {r.diet === 'veg' ? '🥗' : '🍗'} · {r.drink || '🍻 sorted'} · {r.snacks.length} snack{r.snacks.length > 1 ? 's' : ''}
             </span>
           </div>
         ))}
