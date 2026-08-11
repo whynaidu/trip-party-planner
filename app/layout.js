@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'HDFC Trip Party Planner 🎉',
-  description: 'Tell us your food & drink vibe for the HDFC trip',
+  title: 'Trip Party Planner 🎉',
+  description: 'Tell us your food & drink vibe for the trip',
 };
 
 export const viewport = { width: 'device-width', initialScale: 1 };

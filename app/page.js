@@ -34,7 +34,7 @@ export default function Form() {
       <div className="done">
         <div className="emoji">🎉🥳🎊</div>
         <h1>You&apos;re on the list, {name.trim()}!</h1>
-        <p>See you on the HDFC trip. Get ready to party!</p>
+        <p>See you on the trip. Get ready to party!</p>
       </div>
     );
 
@@ -42,7 +42,7 @@ export default function Form() {
     <main className="wrap">
       <div className="hero">
         <div className="emoji">🏖️🎉🍻</div>
-        <h1>HDFC Trip Party Planner</h1>
+        <h1>Trip Party Planner</h1>
         <p>30 seconds. Tell us your vibe so we stock the good stuff.</p>
       </div>
 

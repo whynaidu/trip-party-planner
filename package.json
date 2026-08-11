@@ -1,5 +1,5 @@
 {
-  "name": "hdfc-trip-form",
+  "name": "trip-party-planner",
   "private": true,
   "scripts": {
     "dev": "next dev",
