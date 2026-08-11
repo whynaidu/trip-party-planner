@@ -1,0 +1,139 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #12081f;
+  --card: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --ink: #f5f2fa;
+  --ink-2: #b9aed1;
+  --accent: linear-gradient(135deg, #f43f8e, #fb923c);
+  --accent-solid: #f43f8e;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(60vw 60vw at 85% -10%, rgba(244, 63, 142, 0.25), transparent 60%),
+    radial-gradient(50vw 50vw at -10% 40%, rgba(99, 102, 241, 0.28), transparent 60%),
+    radial-gradient(40vw 40vw at 70% 100%, rgba(251, 146, 60, 0.18), transparent 60%),
+    var(--bg);
+  min-height: 100vh;
+  color: var(--ink);
+}
+
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.hero { text-align: center; padding: 24px 0 8px; }
+.hero .emoji { font-size: 44px; }
+.hero h1 {
+  font-size: 28px;
+  margin: 8px 0 4px;
+  background: var(--accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero p { color: var(--ink-2); font-size: 15px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 18px;
+  margin-top: 16px;
+  backdrop-filter: blur(8px);
+}
+.card h2 { font-size: 16px; margin-bottom: 12px; }
+
+input[type='text'] {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--ink);
+  font-size: 16px;
+  outline: none;
+}
+input[type='text']:focus { border-color: var(--accent-solid); }
+
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.choice, .chip {
+  border: 1px solid var(--card-border);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--ink);
+  border-radius: 14px;
+  padding: 14px 12px;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.1s, border-color 0.15s, background 0.15s;
+}
+.chip { padding: 10px 14px; border-radius: 999px; }
+.choice:active, .chip:active { transform: scale(0.96); }
+.choice .big { display: block; font-size: 28px; margin-bottom: 4px; }
+
+.choice.on, .chip.on {
+  background: var(--accent);
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(244, 63, 142, 0.4);
+}
+
+.submit {
+  width: 100%;
+  margin-top: 20px;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(244, 63, 142, 0.45);
+}
+.submit:disabled { opacity: 0.5; box-shadow: none; }
+
+.error { color: #fda4af; font-size: 14px; margin-top: 12px; text-align: center; }
+
+.done { text-align: center; padding: 80px 16px; }
+.done .emoji { font-size: 72px; }
+.done h1 { font-size: 26px; margin: 16px 0 8px; }
+.done p { color: var(--ink-2); }
+
+a.link { color: #fda4af; }
+
+/* ---- dashboard (chart surfaces follow the dataviz palette, dark mode) ---- */
+.dash { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+.tile {
+  background: #1a1a19;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+}
+.tile .num { font-size: 32px; font-weight: 700; color: #ffffff; }
+.tile .lbl { font-size: 13px; color: #c3c2b7; margin-top: 2px; }
+
+.chart {
+  background: #1a1a19;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 16px;
+}
+.chart h2 { font-size: 15px; color: #ffffff; margin-bottom: 14px; }
+.row { display: grid; grid-template-columns: 110px 1fr 34px; gap: 10px; align-items: center; margin-top: 8px; }
+.row .lbl { font-size: 13px; color: #c3c2b7; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row .track { background: #2c2c2a; border-radius: 4px; height: 20px; }
+.row .bar { background: #3987e5; height: 100%; border-radius: 4px; min-width: 2px; transition: width 0.4s; }
+.row:hover .bar { background: #5598e7; }
+.row .val { font-size: 13px; color: #ffffff; font-variant-numeric: tabular-nums; }
+.empty { color: #898781; text-align: center; padding: 40px 0; }
