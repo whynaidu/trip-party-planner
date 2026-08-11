@@ -123,6 +123,43 @@ input[type='text']:focus { border-color: var(--accent-solid); }
   100% { opacity: 0; transform: translate(-50%, -50%) rotate(calc(var(--i) * 60deg)) translateY(-56px) scale(1.4); }
 }
 
+/* entry splash */
+.splash {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.splash h1 {
+  font-size: 34px;
+  margin: 16px 0 8px;
+  background: var(--accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rise 0.5s ease-out backwards;
+}
+.splash p { color: var(--ink-2); max-width: 300px; animation: rise 0.5s 0.15s ease-out backwards; }
+.submit.enter { width: auto; padding: 16px 40px; margin-top: 28px; animation: rise 0.5s 0.3s ease-out backwards; }
+
+/* cards rise in one after another */
+.wrap .card { animation: rise 0.45s ease-out backwards; }
+.wrap .card:nth-child(2) { animation-delay: 0.05s; }
+.wrap .card:nth-child(3) { animation-delay: 0.12s; }
+.wrap .card:nth-child(4) { animation-delay: 0.19s; }
+.wrap .card:nth-child(5) { animation-delay: 0.26s; }
+.wrap .submit { animation: rise 0.45s 0.33s ease-out backwards; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* confetti rain on success */
 .done { position: relative; overflow: hidden; min-height: 100vh; }
 .confetti {

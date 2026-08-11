@@ -29,6 +29,7 @@ export default function Form() {
   const [custom, setCustom] = useState('');
   const [snacks, setSnacks] = useState([]);
   const [state, setState] = useState('idle'); // idle | busy | done | error
+  const [entered, setEntered] = useState(false);
 
   const toggleSnack = (s) =>
     setSnacks((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
@@ -47,6 +48,32 @@ export default function Form() {
     }).catch(() => null);
     setState(res && res.ok ? 'done' : 'error');
   }
+
+  if (!entered)
+    return (
+      <div className="splash">
+        {CONFETTI.concat(CONFETTI).map((c, i) => (
+          <span
+            key={i}
+            className="confetti"
+            style={{
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2.5}s`,
+              animationDuration: `${2.5 + Math.random() * 2}s`,
+              fontSize: `${18 + Math.random() * 22}px`,
+            }}
+          >
+            {c}
+          </span>
+        ))}
+        <div className="emoji bounce" style={{ fontSize: 64 }}>🪩</div>
+        <h1>Trip incoming!</h1>
+        <p>A form so short even your attention span can handle it.</p>
+        <button className="submit enter" onClick={() => setEntered(true)}>
+          Let&apos;s gooo 🎉
+        </button>
+      </div>
+    );
 
   if (state === 'done')
     return (
