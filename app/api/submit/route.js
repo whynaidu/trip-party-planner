@@ -9,7 +9,10 @@ export async function POST(req) {
     name &&
     ['veg', 'nonveg'].includes(d?.diet) &&
     okBooze &&
-    DRINKS[d.booze]?.includes(d?.drink) &&
+    typeof d?.drink === 'string' &&
+    d.drink.trim().length > 0 &&
+    d.drink.length <= 40 &&
+    (DRINKS[d.booze]?.includes(d.drink) || d.booze === 'nonalcoholic') &&
     Array.isArray(d?.snacks) &&
     d.snacks.length > 0 &&
     d.snacks.every((s) => SNACKS.includes(s));

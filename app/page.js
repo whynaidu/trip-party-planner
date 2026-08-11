@@ -7,20 +7,22 @@ export default function Form() {
   const [diet, setDiet] = useState(null);
   const [booze, setBooze] = useState(null);
   const [drink, setDrink] = useState(null);
+  const [custom, setCustom] = useState('');
   const [snacks, setSnacks] = useState([]);
   const [state, setState] = useState('idle'); // idle | busy | done | error
 
   const toggleSnack = (s) =>
     setSnacks((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
 
-  const ready = name.trim() && diet && booze && drink && snacks.length > 0;
+  const finalDrink = drink === 'other' ? custom.trim().slice(0, 40) : drink;
+  const ready = name.trim() && diet && booze && finalDrink && snacks.length > 0;
 
   async function submit() {
     setState('busy');
     const res = await fetch('/api/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name.trim(), diet, booze, drink, snacks }),
+      body: JSON.stringify({ name: name.trim(), diet, booze, drink: finalDrink, snacks }),
     }).catch(() => null);
     setState(res && res.ok ? 'done' : 'error');
   }
@@ -92,7 +94,23 @@ export default function Form() {
                 {d}
               </button>
             ))}
+            {booze === 'nonalcoholic' && (
+              <button className={`chip ${drink === 'other' ? 'on' : ''}`} onClick={() => setDrink('other')}>
+                Other ✍️
+              </button>
+            )}
           </div>
+          {drink === 'other' && (
+            <div style={{ marginTop: 12 }}>
+              <input
+                type="text"
+                placeholder="Type your drink…"
+                maxLength={40}
+                value={custom}
+                onChange={(e) => setCustom(e.target.value)}
+              />
+            </div>
+          )}
         </div>
       )}
 
