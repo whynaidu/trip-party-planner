@@ -65,6 +65,7 @@ input[type='text']:focus { border-color: var(--accent-solid); }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
 
 .choice, .chip {
+  position: relative;
   border: 1px solid var(--card-border);
   background: rgba(0, 0, 0, 0.25);
   color: var(--ink);
@@ -84,6 +85,54 @@ input[type='text']:focus { border-color: var(--accent-solid); }
   border-color: transparent;
   font-weight: 600;
   box-shadow: 0 4px 20px rgba(244, 63, 142, 0.4);
+  animation: pop 0.3s ease-out;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.9); }
+  60% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.bounce { animation: bounce 2.2s ease-in-out infinite; display: inline-block; }
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px) rotate(-3deg); }
+}
+
+.quip {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #fda4af;
+  font-style: italic;
+  animation: pop 0.3s ease-out;
+}
+
+/* party popper burst on selection */
+.popper { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.popper span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 18px;
+  animation: burst 0.7s ease-out forwards;
+  transform: translate(-50%, -50%) rotate(calc(var(--i) * 60deg));
+}
+@keyframes burst {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(calc(var(--i) * 60deg)) translateY(0); }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(calc(var(--i) * 60deg)) translateY(-56px) scale(1.4); }
+}
+
+/* confetti rain on success */
+.done { position: relative; overflow: hidden; min-height: 100vh; }
+.confetti {
+  position: fixed;
+  top: -48px;
+  animation: fall linear forwards;
+  pointer-events: none;
+}
+@keyframes fall {
+  to { transform: translateY(115vh) rotate(480deg); }
 }
 
 .submit {
